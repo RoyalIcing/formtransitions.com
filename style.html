@@ -1,0 +1,63 @@
+<style>
+    :root {
+        background: #111;
+        color: white;
+        font-family: system-ui, sans-serif;
+        font-size: 150%;
+    }
+
+    @view-transition {
+        navigation: auto;
+    }
+
+    body {
+        max-width: 30ch;
+        margin: auto;
+    }
+    a {
+        color: inherit;
+    }
+    input,
+    textarea,
+    button {
+        color: inherit;
+        font-size: inherit;
+        border: none;
+        padding-block: 0.25em;
+        padding-inline: 0.333333em;
+        /*view-transition-name: match-element;*/
+    }
+    input,
+    textarea {
+        background: hsl(0 0 100% / 5%);
+        border: 1px solid hsl(0 0 100% / 20%);
+    }
+    button {
+        color: black;
+        background: hsl(0 0 100% / 60%);
+        border: 1px solid hsl(0 0 100% / 70%);
+    }
+    form {
+        display: grid;
+        gap: 1lh;
+    }
+    fieldset {
+        display: grid;
+        gap: 0.5lh;
+    }
+    p,
+    ul,
+    ol,
+    fieldset,
+    figure,
+    img {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+    [role="alert"] {
+        color: hsl(355deg, 70%, 60%);
+        view-transition-name: match-element;
+    }
+</style>

@@ -1,56 +1,33 @@
 <?php
-if ($_SERVER["REQUEST_URI"] === "/search?") {
-    header("Location: /search");
+header(
+    "content-security-policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'self'; img-src 'self' data:;",
+); ?><!doctype html><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<?php
+require "./style.html";
+
+$path = rtrim($_SERVER["REQUEST_URI"], "?");
+if ($_SERVER["REQUEST_URI"] !== $path) {
+    header("Location: $path");
     exit();
 }
 
-$items = file("fruit.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+$path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 
-$filteredItems = $items;
-$search = trim($_GET["q"] ?? "");
+if ($path === "/"):
+    echo "<h1>Form Transitions</h1>";
+    echo "<ul>";
+    echo "<li><a href=/search>Search</a>";
+    echo "<li><a href=/login>Sign in</a>";
+    echo "</ul>";
+endif;
 
-if ($search != "") {
-    $filteredItems = array_filter(
-        $items,
-        fn($item) => strpos($item, $search) !== false,
-    );
-}
-?>
-<!doctype html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+if ($path === "/search"):
+    require "./php/search.php";
+endif;
 
-<style>
-:root {
-    font-family: system-ui, sans-serif;
-    font-size: 150%;
-}
-body {
-    max-width: 30ch;
-    margin: auto;
-}
-input, button {
-    font-size: inherit;
-}
-form {
-    display: grid;
-    gap: 1lh;
-}
+if ($path === "/login"):
+    require "./php/login.php";
+endif;
 
-@view-transition {
-  navigation: auto;
-}
-</style>
-
-<form action="/search">
-    <input name="q" type="search" placeholder="Search..." value="<?= htmlspecialchars(
-        $search,
-    ) ?>">
-</form>
-<form action="/search">
-    <button>Clear</button>
-</form>
-
-<?php foreach ($filteredItems as $item) {
-    echo "<p style='view-transition-name: " . sha1($item) . "'>$item</p>";
-}
